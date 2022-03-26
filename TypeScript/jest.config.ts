@@ -1,7 +1,8 @@
-import { pathsToModuleNameMapper } from  "ts-jest/utils";
+import { pathsToModuleNameMapper } from "ts-jest/utils";
 const { compilerOptions } = require("./tsconfig");
 
 export default {
+  preset: "ts-jest",
   roots: ['<rootDir>/app', '<rootDir>/test/jest'],
   collectCoverage: true,
   coverageDirectory: 'coverage',
@@ -9,5 +10,5 @@ export default {
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' } ),
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
 };
