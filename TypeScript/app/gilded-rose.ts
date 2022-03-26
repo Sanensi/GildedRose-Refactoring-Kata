@@ -39,22 +39,24 @@ export class GildedRose {
     this.items.forEach((item, i) => {
       if (item instanceof Sulfuras) return
 
-      if (item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" && item.quality > 0) {
-        item.quality--
+      if (item instanceof AgedBrie && item.quality < 50) {
+        item.quality++
       }
-      else if (item.quality < 50) {
+
+      if (item instanceof BackstagePass && item.quality < 50) {
         item.quality++
 
-        if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-          if (item.sellIn < 11 && item.quality < 50) {
-            item.quality++
-          }
-
-          if (item.sellIn < 6 && item.quality < 50) {
-            item.quality++
-          }
+        if (item.sellIn < 11 && item.quality < 50) {
+          item.quality++
         }
 
+        if (item.sellIn < 6 && item.quality < 50) {
+          item.quality++
+        }
+      }
+
+      if (item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" && item.quality > 0) {
+        item.quality--
       }
 
       item.sellIn = item.sellIn - 1;
