@@ -10,9 +10,24 @@ export class Item {
   }
 }
 
-export class AgedBrie extends Item {
+interface GildedRoseItem {
+  updateQuality(): void
+}
+
+export class AgedBrie extends Item implements GildedRoseItem {
   constructor(sellIn: number, quality: number) {
     super("Aged Brie", sellIn, quality)
+  }
+
+  updateQuality(): void {
+    if (this.quality < 50) {
+      this.quality++
+      if (this.sellIn <= 0 && this.quality < 50) {
+        this.quality++
+      }
+    }
+
+    this.sellIn--
   }
 }
 
@@ -22,9 +37,29 @@ export class Sulfuras extends Item {
   }
 }
 
-export class BackstagePass extends Item {
+export class BackstagePass extends Item implements GildedRoseItem {
   constructor(sellIn, quality: number) {
     super("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)
+  }
+
+  updateQuality(): void {
+    if (this.quality < 50) {
+      this.quality++
+
+      if (this.sellIn < 11 && this.quality < 50) {
+        this.quality++
+      }
+
+      if (this.sellIn < 6 && this.quality < 50) {
+        this.quality++
+      }
+
+      if (this.sellIn <= 0) {
+        this.quality = 0
+      }
+    }
+
+    this.sellIn--
   }
 }
 
@@ -39,27 +74,12 @@ export class GildedRose {
     this.items.forEach((item) => {
       if (item instanceof Sulfuras) return
 
-      if (item instanceof AgedBrie && item.quality < 50) {
-        item.quality++
-        if (item.sellIn <= 0 && item.quality < 50) {
-          item.quality++
-        }
+      if (item instanceof AgedBrie) {
+        item.updateQuality()
       }
 
-      if (item instanceof BackstagePass && item.quality < 50) {
-        item.quality++
-
-        if (item.sellIn < 11 && item.quality < 50) {
-          item.quality++
-        }
-
-        if (item.sellIn < 6 && item.quality < 50) {
-          item.quality++
-        }
-
-        if (item.sellIn <= 0) {
-          item.quality = 0
-        }
+      if (item instanceof BackstagePass) {
+        item.updateQuality()
       }
 
       if (!(item instanceof AgedBrie) && !(item instanceof BackstagePass) && item.quality > 0) {
@@ -67,9 +87,9 @@ export class GildedRose {
         if (item.sellIn <= 0 && item.quality > 0) {
           item.quality--
         }
-      }
 
-      item.sellIn--
+        item.sellIn--
+      }
     })
 
     return this.items
