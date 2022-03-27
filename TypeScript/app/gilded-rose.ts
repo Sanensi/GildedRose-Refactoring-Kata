@@ -44,10 +44,12 @@ export class AgedBrie extends Item implements GildedRoseItem {
   }
 }
 
-export class Sulfuras extends Item {
+export class Sulfuras extends Item implements GildedRoseItem {
   constructor(sellIn) {
     super("Sulfuras, Hand of Ragnaros", sellIn, 80)
   }
+
+  updateQuality(): void { }
 }
 
 export class BackstagePass extends Item implements GildedRoseItem {
@@ -77,28 +79,14 @@ export class BackstagePass extends Item implements GildedRoseItem {
 }
 
 export class GildedRose {
-  items: Array<Item>;
+  items: Array<GildedRoseItem>;
 
-  constructor(items: Array<Item> = []) {
+  constructor(items: Array<GildedRoseItem> = []) {
     this.items = items;
   }
 
   updateQuality() {
-    this.items.forEach((item) => {
-      if (item instanceof Sulfuras) return
-
-      if (item instanceof AgedBrie) {
-        item.updateQuality()
-      }
-
-      if (item instanceof BackstagePass) {
-        item.updateQuality()
-      }
-
-      if (item instanceof ExpirableItem) {
-        item.updateQuality()
-      }
-    })
+    this.items.forEach((item) => item.updateQuality())
 
     return this.items
   }

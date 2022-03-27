@@ -122,7 +122,7 @@ describe("Gilded Rose", () => {
 
   describe.skip("Conjured items", () => {
     it("decreases its quality by 2 at the end of the day", () => {
-      const conjuredItem = new Item("Conjured", 1, 2)
+      const conjuredItem = new ExpirableItem("Conjured", 1, 2)
       const system = new GildedRose([conjuredItem])
 
       system.updateQuality()
@@ -131,7 +131,7 @@ describe("Gilded Rose", () => {
     })
 
     it("decreases its quality by 4 when its 'sell in' date is passed", () => {
-      const expiredConjuredItem = new Item("expired-item", 0, 4)
+      const expiredConjuredItem = new ExpirableItem("expired-item", 0, 4)
       const system = new GildedRose([expiredConjuredItem])
 
       system.updateQuality()
