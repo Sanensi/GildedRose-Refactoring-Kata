@@ -36,7 +36,7 @@ export class GildedRose {
   }
 
   updateQuality() {
-    this.items.forEach((item, i) => {
+    this.items.forEach((item) => {
       if (item instanceof Sulfuras) return
 
       if (item instanceof AgedBrie && item.quality < 50) {
@@ -62,16 +62,16 @@ export class GildedRose {
       item.sellIn = item.sellIn - 1;
 
       if (item.sellIn < 0) {
-        if (item.name != "Aged Brie") {
-          if (item.name != "Backstage passes to a TAFKAL80ETC concert" && item.quality > 0) {
-            item.quality--
-          }
-          else {
-            item.quality = 0
-          }
+        if (item instanceof BackstagePass) {
+          item.quality = 0
         }
-        else if (item.quality < 50) {
+
+        if (item instanceof AgedBrie && item.quality < 50) {
           item.quality++
+        }
+
+        if (item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" && item.quality > 0) {
+          item.quality--
         }
       }
     })
