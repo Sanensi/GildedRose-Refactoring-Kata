@@ -1,9 +1,9 @@
-import { AgedBrie, BackstagePass, GildedRose, Item, Sulfuras } from "@/gilded-rose";
+import { AgedBrie, BackstagePass, ExpirableItem, GildedRose, Item, Sulfuras } from "@/gilded-rose";
 
 describe("Gilded Rose", () => {
   describe("Item", () => {
     it("has a name, a 'sell in' expiration date and a quality index", () => {
-      const item = new Item("some-item", 1, 2)
+      const item = new ExpirableItem("some-item", 1, 2)
 
       expect(item.name).toEqual("some-item")
       expect(item.sellIn).toEqual(1)
@@ -13,7 +13,7 @@ describe("Gilded Rose", () => {
 
   describe("Inventory System", () => {
     it("lowers the quality of an item and its 'sell in' date by 1 at the end of the day", () => {
-      const item = new Item("some-item", 1, 1)
+      const item = new ExpirableItem("some-item", 1, 1)
       const system = new GildedRose([item])
 
       system.updateQuality()
@@ -23,7 +23,7 @@ describe("Gilded Rose", () => {
     })
 
     it("lowers the quality of an item by 2 when its 'sell in' date is passed", () => {
-      const expiredItem = new Item("expired-item", 0, 2)
+      const expiredItem = new ExpirableItem("expired-item", 0, 2)
       const system = new GildedRose([expiredItem])
 
       system.updateQuality()
@@ -32,7 +32,7 @@ describe("Gilded Rose", () => {
     })
 
     it("can not lower the quality of an item under 0", () => {
-      const trash = new Item("trash", 0, 0)
+      const trash = new ExpirableItem("trash", 0, 0)
       const system = new GildedRose([trash])
 
       system.updateQuality()

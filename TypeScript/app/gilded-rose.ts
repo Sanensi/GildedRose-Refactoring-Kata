@@ -14,6 +14,19 @@ interface GildedRoseItem {
   updateQuality(): void
 }
 
+export class ExpirableItem extends Item implements GildedRoseItem {
+  updateQuality(): void {
+    if (this.quality > 0) {
+      this.quality--
+      if (this.sellIn <= 0 && this.quality > 0) {
+        this.quality--
+      }
+
+      this.sellIn--
+    }
+  }
+}
+
 export class AgedBrie extends Item implements GildedRoseItem {
   constructor(sellIn: number, quality: number) {
     super("Aged Brie", sellIn, quality)
@@ -82,13 +95,8 @@ export class GildedRose {
         item.updateQuality()
       }
 
-      if (!(item instanceof AgedBrie) && !(item instanceof BackstagePass) && item.quality > 0) {
-        item.quality--
-        if (item.sellIn <= 0 && item.quality > 0) {
-          item.quality--
-        }
-
-        item.sellIn--
+      if (item instanceof ExpirableItem) {
+        item.updateQuality()
       }
     })
 
