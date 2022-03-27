@@ -41,6 +41,9 @@ export class GildedRose {
 
       if (item instanceof AgedBrie && item.quality < 50) {
         item.quality++
+        if (item.sellIn <= 0 && item.quality < 50) {
+          item.quality++
+        }
       }
 
       if (item instanceof BackstagePass && item.quality < 50) {
@@ -53,22 +56,17 @@ export class GildedRose {
         if (item.sellIn < 6 && item.quality < 50) {
           item.quality++
         }
-      }
 
-      if (item instanceof BackstagePass && item.sellIn <= 0) {
-        item.quality = 0
-      }
-
-      if (item instanceof AgedBrie && item.sellIn <= 0 && item.quality < 50) {
-        item.quality++
+        if (item.sellIn <= 0) {
+          item.quality = 0
+        }
       }
 
       if (!(item instanceof AgedBrie) && !(item instanceof BackstagePass) && item.quality > 0) {
         item.quality--
-      }
-
-      if (!(item instanceof AgedBrie) && !(item instanceof BackstagePass) && item.sellIn <= 0 && item.quality > 0) {
-        item.quality--
+        if (item.sellIn <= 0 && item.quality > 0) {
+          item.quality--
+        }
       }
 
       item.sellIn--
