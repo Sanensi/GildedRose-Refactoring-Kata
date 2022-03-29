@@ -1,7 +1,15 @@
-import { AgedBrie, BackstagePass, ExpirableItem, GildedRose, Item, Sulfuras } from "@/gilded-rose";
+import { AgedBrie, BackstagePass, ExpirableItem, GildedRose, GildedRoseItem, Item, Sulfuras } from "@/gilded-rose";
+import { MockedObject } from "ts-jest/dist/utils/testing";
 
 describe("Gilded Rose", () => {
+  it("update the quality of every item in the shop", () => {
+    const items: MockedObject<GildedRoseItem>[] = Array.from({ length: 7 }, () => ({ updateQuality: jest.fn() }))
+    const gildedRose = new GildedRose(items)
 
+    gildedRose.updateQuality()
+
+    items.forEach((item) => expect(item.updateQuality).toHaveBeenCalled())
+  })
 });
 
 describe("Item", () => {

@@ -10,7 +10,7 @@ export class Item {
   }
 }
 
-interface GildedRoseItem {
+export interface GildedRoseItem {
   updateQuality(): void
 }
 
