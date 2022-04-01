@@ -3,86 +3,105 @@ export class Item {
   sellIn: number;
   quality: number;
 
-  constructor(name, sellIn, quality) {
+  constructor(name: string, sellIn: number, quality: number) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
   }
 }
 
-export interface GildedRoseItem {
-  updateQuality(): void
+abstract class GildedRoseItem {
+  get name() { return this.item.name }
+  get sellIn() { return this.item.sellIn }
+  get quality() { return this.item.quality }
+
+  protected item: Item;
+
+  constructor(item: Item)
+  constructor(name: string, sellIn: number, quality: number)
+  constructor(...args: [Item] | [string, number, number]) {
+    if (args.length === 1) {
+      const [item] = args
+      this.item = item
+    }
+    else {
+      const [name, sellIn, quality] = args
+      this.item = new Item(name, sellIn, quality)
+    }
+  }
+
+  abstract updateQuality(): void
 }
 
-export class ExpirableItem extends Item implements GildedRoseItem {
+export class ExpirableItem extends GildedRoseItem {
   updateQuality(): void {
-    if (this.quality > 0) {
-      this.quality--
-      if (this.sellIn <= 0 && this.quality > 0) {
-        this.quality--
+    if (this.item.quality > 0) {
+      this.item.quality--
+      if (this.item.sellIn <= 0 && this.item.quality > 0) {
+        this.item.quality--
       }
 
-      this.sellIn--
+      this.item.sellIn--
     }
   }
 }
 
-export class AgedBrie extends Item implements GildedRoseItem {
+export class AgedBrie extends GildedRoseItem {
   constructor(sellIn: number, quality: number) {
-    super("Aged Brie", sellIn, quality)
+    super(new Item("Aged Brie", sellIn, quality))
   }
 
   updateQuality(): void {
-    if (this.quality < 50) {
-      this.quality++
-      if (this.sellIn <= 0 && this.quality < 50) {
-        this.quality++
+    if (this.item.quality < 50) {
+      this.item.quality++
+      if (this.item.sellIn <= 0 && this.item.quality < 50) {
+        this.item.quality++
       }
     }
 
-    this.sellIn--
+    this.item.sellIn--
   }
 }
 
-export class Sulfuras extends Item implements GildedRoseItem {
+export class Sulfuras extends GildedRoseItem {
   constructor(sellIn) {
-    super("Sulfuras, Hand of Ragnaros", sellIn, 80)
+    super(new Item("Sulfuras, Hand of Ragnaros", sellIn, 80))
   }
 
   updateQuality(): void { }
 }
 
-export class BackstagePass extends Item implements GildedRoseItem {
+export class BackstagePass extends GildedRoseItem {
   constructor(sellIn, quality: number) {
-    super("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)
+    super(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality))
   }
 
   updateQuality(): void {
-    if (this.quality < 50) {
-      this.quality++
+    if (this.item.quality < 50) {
+      this.item.quality++
 
-      if (this.sellIn < 11 && this.quality < 50) {
-        this.quality++
+      if (this.item.sellIn < 11 && this.item.quality < 50) {
+        this.item.quality++
       }
 
-      if (this.sellIn < 6 && this.quality < 50) {
-        this.quality++
+      if (this.item.sellIn < 6 && this.item.quality < 50) {
+        this.item.quality++
       }
 
-      if (this.sellIn <= 0) {
-        this.quality = 0
+      if (this.item.sellIn <= 0) {
+        this.item.quality = 0
       }
     }
 
-    this.sellIn--
+    this.item.sellIn--
   }
 }
 
 export class GildedRose {
   items: Array<GildedRoseItem>;
 
-  constructor(items: Array<GildedRoseItem> = []) {
-    this.items = items;
+  constructor(items: Array<Item> = []) {
+    this.items = items.map((item) => new ExpirableItem(item));
   }
 
   updateQuality() {
