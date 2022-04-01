@@ -97,11 +97,17 @@ export class BackstagePass extends GildedRoseItem {
   }
 }
 
+export class GildedRoseItemFactory {
+  create(item: Item): GildedRoseItem {
+    return new ExpirableItem(item)
+  }
+}
+
 export class GildedRose {
   items: Array<GildedRoseItem>;
 
-  constructor(items: Array<Item> = []) {
-    this.items = items.map((item) => new ExpirableItem(item));
+  constructor(items: Array<Item> = [], itemFactory: GildedRoseItemFactory = new GildedRoseItemFactory()) {
+    this.items = items.map((item) => itemFactory.create(item));
   }
 
   updateQuality() {

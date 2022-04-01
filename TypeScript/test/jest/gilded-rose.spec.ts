@@ -1,6 +1,17 @@
 import { AgedBrie, BackstagePass, ExpirableItem, GildedRose, Item, Sulfuras } from "@/gilded-rose";
 
 describe("Gilded Rose", () => {
+  it("creates a GildedRoseItem for every item received", () => {
+    const gildedRoseItemFactory = { create: jest.fn((item: Item) => new ExpirableItem(item)) }
+    const items = Array.from({ length: 7 }, (_, i) => new Item(`some-item-${i}`, 1, 1))
+
+    new GildedRose(items, gildedRoseItemFactory)
+
+    items.forEach((item, i) => {
+      expect(gildedRoseItemFactory.create).toHaveBeenNthCalledWith(i + 1, item)
+    })
+  })
+
   it("update the quality of every item in the shop", () => {
     const items = Array.from({ length: 7 }, (_, i) => new Item(`some-item-${i}`, 1, 1))
     const gildedRose = new GildedRose(items)
