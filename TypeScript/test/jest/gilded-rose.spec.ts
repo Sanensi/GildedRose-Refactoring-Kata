@@ -1,9 +1,45 @@
-import { GildedRose } from "@/gilded-rose";
+import { GildedRose, GildedRoseItemFactory } from "@/gilded-rose";
 import { BackstagePass } from "@/glided-rose-items/BackstagePass";
 import { Sulfuras } from "@/glided-rose-items/Sulfuras";
 import { AgedBrie } from "@/glided-rose-items/AgedBrie";
 import { ExpirableItem } from "@/glided-rose-items/ExpirableItem";
 import { Item } from "@/Item";
+
+describe("Gilded Rose Item Factory", () => {
+  const itemFactory = new GildedRoseItemFactory()
+
+  it("creates an AgedBrie if the item name is 'Aged Brie'", () => {
+    const item = new Item("Aged Brie", 1, 1)
+
+    const agedBrie = itemFactory.create(item)
+
+    expect(agedBrie).toBeInstanceOf(AgedBrie)
+  })
+
+  it("creates a BackstagePass if the item name is 'Backstage passes to a TAFKAL80ETC concert'", () => {
+    const item = new Item("Backstage passes to a TAFKAL80ETC concert", 1, 1)
+
+    const backstagePass = itemFactory.create(item)
+
+    expect(backstagePass).toBeInstanceOf(BackstagePass)
+  })
+
+  it("creates a Sulfuras if the item name is 'Sulfuras, Hand of Ragnaros'", () => {
+    const item = new Item("Sulfuras, Hand of Ragnaros", 1, 1)
+
+    const backstagePass = itemFactory.create(item)
+
+    expect(backstagePass).toBeInstanceOf(Sulfuras)
+  })
+
+  it("creates an ExpirableItem otherwise", () => {
+    const item = new Item("some-item", 1, 1)
+
+    const expirableItem = itemFactory.create(item)
+
+    expect(expirableItem).toBeInstanceOf(ExpirableItem)
+  })
+})
 
 describe("Gilded Rose", () => {
   it("creates a GildedRoseItem for every item received", () => {
