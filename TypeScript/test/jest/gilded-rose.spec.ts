@@ -1,8 +1,13 @@
-import { AgedBrie, BackstagePass, ExpirableItem, GildedRose, Item, Sulfuras } from "@/gilded-rose";
+import { GildedRose } from "@/gilded-rose";
+import { BackstagePass } from "@/glided-rose-items/BackstagePass";
+import { Sulfuras } from "@/glided-rose-items/Sulfuras";
+import { AgedBrie } from "@/glided-rose-items/AgedBrie";
+import { ExpirableItem } from "@/glided-rose-items/ExpirableItem";
+import { Item } from "@/Item";
 
 describe("Gilded Rose", () => {
   it("creates a GildedRoseItem for every item received", () => {
-    const gildedRoseItemFactory = { create: jest.fn((item: Item) => new ExpirableItem(item)) }
+    const gildedRoseItemFactory = { create: jest.fn() }
     const items = Array.from({ length: 7 }, (_, i) => new Item(`some-item-${i}`, 1, 1))
 
     new GildedRose(items, gildedRoseItemFactory)
